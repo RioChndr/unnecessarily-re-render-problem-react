@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { Book, BookContext } from './BookContext';
+import { useMemo, useState } from 'react';
+import { Book, BookContext, BookContextState, BookContextValue, useBook } from './BookContext';
 import { BookForm } from './BookForm';
 import './App.css';
 
 type Theme = 'light' | 'dark';
 
-export const App = () => {
-  console.log('App called');
+const useBookState = (): BookContextState => {
   const [theme, setTheme] = useState<Theme>('light');
 
   const toggleTheme = () => {
@@ -19,17 +18,39 @@ export const App = () => {
     setBook((book) => ({ ...book, name }));
   };
 
-  const value = { book, changeName };
+  return {
+    theme,
+    toggleTheme,
+    book,
+    changeName,
+  }
+}
 
+const useInitState = (): BookContextValue => {
+  const state = useBookState()
+  console.log('useInitState called')
+  return {
+    state: state
+  }
+}
+
+export const App = () => {
+  console.log('App called')
+  const initVal = useInitState();
   return (
-    <BookContext.Provider value={value}>
-      <main className={theme}>
-        <ToggleThemeButton theme={theme} toggleTheme={toggleTheme} />
-        <BookForm />
-      </main>
+    <BookContext.Provider value={initVal}>
+      <main className={initVal.state.theme}><MainPage /></main>
     </BookContext.Provider>
   );
 };
+
+const MainPage = () => {
+  const { state } = useBook();
+  return <>
+    <ToggleThemeButton theme={state.theme} toggleTheme={state.toggleTheme} />
+    <BookForm />
+  </>
+}
 
 const ToggleThemeButton = ({
   theme,

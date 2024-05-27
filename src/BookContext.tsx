@@ -2,9 +2,15 @@ import { createContext, ReactNode, useContext, useState } from 'react';
 
 type Book = { name: string };
 
-type BookContextValue = {
+export interface BookContextState {
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
   book: Book;
   changeName: (newName: string) => void;
+}
+
+export type BookContextValue = {
+  state: BookContextState;
 };
 
 const BookContext = createContext<BookContextValue | null>(null);
