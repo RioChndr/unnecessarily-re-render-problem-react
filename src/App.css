@@ -1,0 +1,21 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  padding: 1rem;
+}
+
+main.light {
+  color: black;
+  background-color: white;
+}
+
+main.dark {
+  color: white;
+  background-color: black;
+}
